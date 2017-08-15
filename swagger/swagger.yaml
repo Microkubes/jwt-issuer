@@ -51,13 +51,34 @@ paths:
     post:
       description: Signs in the user and generates JWT token
       operationId: jwt#signin
+      parameters:
+      - description: 'Credentials: password'
+        in: query
+        name: password
+        required: false
+        type: string
+      - description: Scope claim (api:read, api:write)
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: 'Credentials: username'
+        in: query
+        name: username
+        required: false
+        type: string
       produces:
+      - application/vnd.goa.error
       - application/vnd.goa.error
       responses:
         "201":
           description: Created
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/error'
       schemes:

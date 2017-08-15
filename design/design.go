@@ -20,7 +20,13 @@ var _ = Resource("jwt", func() {
 	Action("signin", func() {
 		Description("Signs in the user and generates JWT token")
 		Routing(POST("/signin"))
+		Params(func() {
+			Param("username", String, "Credentials: username")
+			Param("password", String, "Credentials: password")
+			Param("scope", String, "Scope claim (api:read, api:write)")
+		})
 		Response(BadRequest, ErrorMedia)
+		Response(InternalServerError, ErrorMedia)
 		Response(Created)
 	})
 

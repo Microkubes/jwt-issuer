@@ -3,16 +3,35 @@
 package main
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"os"
 
+	"github.com/JormungandrK/jwt-issuer/api"
 	"github.com/JormungandrK/jwt-issuer/app"
-	"github.com/JormungandrK/microservice-tools/gateway"
+	"github.com/JormungandrK/jwt-issuer/config"
+	"github.com/JormungandrK/jwt-issuer/store"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 )
 
 func main() {
+	cf := os.Getenv("SERVICE_CONFIG_FILE")
+	if cf == "" {
+		cf = "config.json"
+	}
+	config, err := config.LoadConfig(cf)
+	if err != nil {
+		panic(err)
+	}
+
+	keyStore, err := store.NewFileKeyStore(config.Keys)
+	if err != nil {
+		panic(err)
+	}
+
+	userAPI, err := api.NewUserAPI(config, keyStore)
+	if err != nil {
+		panic(err)
+	}
 	// Create service
 	service := goa.New("jwt-signin")
 
@@ -23,7 +42,7 @@ func main() {
 	service.Use(middleware.Recover())
 
 	// Mount "signin" controller
-	c := NewSigninController(service)
+	c := NewSigninController(service, userAPI, keyStore, config)
 	app.MountJWTController(service, c)
 
 	// Start service
@@ -31,29 +50,4 @@ func main() {
 		service.LogError("startup", "err", err)
 	}
 
-}
-
-type JWTConfig struct {
-	SigningMethod string
-	Issuer        string
-	ExpiryTime    int
-	KeyFile       string
-}
-
-type Config struct {
-	jwt          JWTConfig
-	microservice gateway.MicroserviceConfig
-}
-
-func LoadConfig(confFile string) (*Config, error) {
-	confBytes, err := ioutil.ReadFile(confFile)
-	if err != nil {
-		return nil, err
-	}
-	config := &Config{}
-	err = json.Unmarshal(confBytes, config)
-	if err != nil {
-		return nil, err
-	}
-	return config, nil
 }
