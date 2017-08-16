@@ -1,11 +1,10 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strings"
 	"time"
 
 	"github.com/JormungandrK/jwt-issuer/config"
@@ -42,11 +41,17 @@ type UserAPIClient struct {
 
 func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error) {
 
-	form := url.Values{}
-	form.Add("username", username)
-	form.Add("password", password)
+	credentials := map[string]string{
+		"username": username,
+		"password": password,
+	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/user/find", userAPI.Config.Services["user-microservice"]), strings.NewReader(form.Encode()))
+	payload, err := json.Marshal(credentials)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/find", userAPI.Config.Services["user-microservice"]), bytes.NewReader(payload))
 
 	if err != nil {
 		return nil, err
@@ -57,15 +62,16 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 		return nil, err
 	}
 
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 	var resp *http.Response
 	err = hystrix.Do("user-microservice.find-user", func() error {
 		r, e := userAPI.Client.Do(req)
-		if resp.StatusCode != 200 {
-			return fmt.Errorf(resp.Status)
-		}
 		resp = r
+		if r.StatusCode != 200 {
+			return fmt.Errorf(r.Status)
+		}
+
 		return e
 	}, nil)
 
@@ -74,6 +80,7 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 	}
 
 	if err != nil {
+		println(err)
 		return nil, err
 	}
 

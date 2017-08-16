@@ -39,19 +39,19 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 
 	// Put your logic here
 	if ctx.Username == nil || ctx.Password == nil {
-		return ctx.BadRequest(fmt.Errorf("Credentials required"))
+		return ctx.BadRequest(goa.ErrBadRequest("credentials-required"))
 	}
 
 	user, err := c.UserAPI.FindUser(*ctx.Username, *ctx.Password)
 	if err != nil {
-		return ctx.InternalServerError(err)
+		return ctx.InternalServerError(goa.ErrInternal(err))
 	}
 	if user == nil {
-		return ctx.BadRequest(fmt.Errorf("No user for credentials"))
+		return ctx.BadRequest(goa.ErrBadRequest("invalid-credentials"))
 	}
 	key, err := c.KeyStore.GetPrivateKey()
 	if err != nil {
-		return ctx.InternalServerError(err)
+		return ctx.InternalServerError(goa.ErrInternal(err))
 	}
 
 	scope := ""
@@ -61,7 +61,7 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 
 	signedToken, err := c.signToken(*user, scope, key)
 	if err != nil {
-		return ctx.BadRequest(err)
+		return ctx.BadRequest(goa.ErrBadRequest(err))
 	}
 
 	ctx.ResponseData.Header().Add("Authorization", fmt.Sprintf("Bearer %s", signedToken))
