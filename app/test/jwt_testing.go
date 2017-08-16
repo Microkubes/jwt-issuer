@@ -28,7 +28,7 @@ import (
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController, password *string, scope *string, username *string) (http.ResponseWriter, error) {
+func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -48,40 +48,14 @@ func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa
 
 	// Setup request context
 	rw := httptest.NewRecorder()
-	query := url.Values{}
-	if password != nil {
-		sliceVal := []string{*password}
-		query["password"] = sliceVal
-	}
-	if scope != nil {
-		sliceVal := []string{*scope}
-		query["scope"] = sliceVal
-	}
-	if username != nil {
-		sliceVal := []string{*username}
-		query["username"] = sliceVal
-	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/jwt/signin"),
-		RawQuery: query.Encode(),
+		Path: fmt.Sprintf("/jwt/signin"),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
-	if password != nil {
-		sliceVal := []string{*password}
-		prms["password"] = sliceVal
-	}
-	if scope != nil {
-		sliceVal := []string{*scope}
-		prms["scope"] = sliceVal
-	}
-	if username != nil {
-		sliceVal := []string{*username}
-		prms["username"] = sliceVal
-	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -118,7 +92,7 @@ func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController, password *string, scope *string, username *string) http.ResponseWriter {
+func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -138,40 +112,14 @@ func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Se
 
 	// Setup request context
 	rw := httptest.NewRecorder()
-	query := url.Values{}
-	if password != nil {
-		sliceVal := []string{*password}
-		query["password"] = sliceVal
-	}
-	if scope != nil {
-		sliceVal := []string{*scope}
-		query["scope"] = sliceVal
-	}
-	if username != nil {
-		sliceVal := []string{*username}
-		query["username"] = sliceVal
-	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/jwt/signin"),
-		RawQuery: query.Encode(),
+		Path: fmt.Sprintf("/jwt/signin"),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
-	if password != nil {
-		sliceVal := []string{*password}
-		prms["password"] = sliceVal
-	}
-	if scope != nil {
-		sliceVal := []string{*scope}
-		prms["scope"] = sliceVal
-	}
-	if username != nil {
-		sliceVal := []string{*username}
-		prms["username"] = sliceVal
-	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -200,7 +148,7 @@ func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Se
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController, password *string, scope *string, username *string) (http.ResponseWriter, error) {
+func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -220,40 +168,14 @@ func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, ser
 
 	// Setup request context
 	rw := httptest.NewRecorder()
-	query := url.Values{}
-	if password != nil {
-		sliceVal := []string{*password}
-		query["password"] = sliceVal
-	}
-	if scope != nil {
-		sliceVal := []string{*scope}
-		query["scope"] = sliceVal
-	}
-	if username != nil {
-		sliceVal := []string{*username}
-		query["username"] = sliceVal
-	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/jwt/signin"),
-		RawQuery: query.Encode(),
+		Path: fmt.Sprintf("/jwt/signin"),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
-	if password != nil {
-		sliceVal := []string{*password}
-		prms["password"] = sliceVal
-	}
-	if scope != nil {
-		sliceVal := []string{*scope}
-		prms["scope"] = sliceVal
-	}
-	if username != nil {
-		sliceVal := []string{*username}
-		prms["username"] = sliceVal
-	}
 	if ctx == nil {
 		ctx = context.Background()
 	}

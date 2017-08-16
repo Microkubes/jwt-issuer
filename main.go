@@ -46,7 +46,7 @@ func main() {
 	app.MountJWTController(service, c)
 
 	// Start service
-	if err := service.ListenAndServe(":8080"); err != nil {
+	if err := service.ListenAndServe(":8085"); err != nil {
 		service.LogError("startup", "err", err)
 	}
 

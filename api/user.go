@@ -85,7 +85,6 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 	}
 
 	userResp := &map[string]interface{}{}
-
 	err = json.NewDecoder(resp.Body).Decode(userResp)
 	if err != nil {
 		return nil, err
@@ -97,6 +96,7 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 	}
 	roles, ok := (*userResp)["roles"]
 	if ok {
+		println("Roles: ", roles)
 		user.Roles = toStringArr(roles)
 	}
 	organizations, ok := (*userResp)["organizations"]
@@ -107,9 +107,15 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 }
 
 func toStringArr(val interface{}) []string {
-	strArr, ok := val.([]string)
+	intfArr, ok := val.([]interface{})
+	strArr := []string{}
 	if !ok {
-		strArr = []string{}
+		return strArr
+	}
+	for _, intfV := range intfArr {
+		if sval, ok := intfV.(string); ok {
+			strArr = append(strArr, sval)
+		}
 	}
 	return strArr
 }

@@ -28,12 +28,6 @@ import (
 type (
 	// SigninJWTCommand is the command line data structure for the signin action of jwt
 	SigninJWTCommand struct {
-		// Credentials: password
-		Password string
-		// Scope claim (api:read, api:write)
-		Scope string
-		// Credentials: username
-		Username    string
 		PrettyPrint bool
 	}
 )
@@ -220,7 +214,7 @@ func (cmd *SigninJWTCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	resp, err := c.SigninJWT(ctx, path, stringFlagVal("password", cmd.Password), stringFlagVal("scope", cmd.Scope), stringFlagVal("username", cmd.Username))
+	resp, err := c.SigninJWT(ctx, path)
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -232,10 +226,4 @@ func (cmd *SigninJWTCommand) Run(c *client.Client, args []string) error {
 
 // RegisterFlags registers the command flags with the command line.
 func (cmd *SigninJWTCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
-	var password string
-	cc.Flags().StringVar(&cmd.Password, "password", password, `Credentials: password`)
-	var scope string
-	cc.Flags().StringVar(&cmd.Scope, "scope", scope, `Scope claim (api:read, api:write)`)
-	var username string
-	cc.Flags().StringVar(&cmd.Username, "username", username, `Credentials: username`)
 }

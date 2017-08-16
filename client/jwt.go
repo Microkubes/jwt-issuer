@@ -24,8 +24,8 @@ func SigninJWTPath() string {
 }
 
 // Signs in the user and generates JWT token
-func (c *Client) SigninJWT(ctx context.Context, path string, password *string, scope *string, username *string) (*http.Response, error) {
-	req, err := c.NewSigninJWTRequest(ctx, path, password, scope, username)
+func (c *Client) SigninJWT(ctx context.Context, path string) (*http.Response, error) {
+	req, err := c.NewSigninJWTRequest(ctx, path)
 	if err != nil {
 		return nil, err
 	}
@@ -33,23 +33,12 @@ func (c *Client) SigninJWT(ctx context.Context, path string, password *string, s
 }
 
 // NewSigninJWTRequest create the request corresponding to the signin action endpoint of the jwt resource.
-func (c *Client) NewSigninJWTRequest(ctx context.Context, path string, password *string, scope *string, username *string) (*http.Request, error) {
+func (c *Client) NewSigninJWTRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
 		scheme = "http"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
-	values := u.Query()
-	if password != nil {
-		values.Set("password", *password)
-	}
-	if scope != nil {
-		values.Set("scope", *scope)
-	}
-	if username != nil {
-		values.Set("username", *username)
-	}
-	u.RawQuery = values.Encode()
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		return nil, err

@@ -21,9 +21,6 @@ type SigninJWTContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Password *string
-	Scope    *string
-	Username *string
 }
 
 // NewSigninJWTContext parses the incoming request URL and body, performs validations and creates the
@@ -35,21 +32,6 @@ func NewSigninJWTContext(ctx context.Context, r *http.Request, service *goa.Serv
 	req := goa.ContextRequest(ctx)
 	req.Request = r
 	rctx := SigninJWTContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramPassword := req.Params["password"]
-	if len(paramPassword) > 0 {
-		rawPassword := paramPassword[0]
-		rctx.Password = &rawPassword
-	}
-	paramScope := req.Params["scope"]
-	if len(paramScope) > 0 {
-		rawScope := paramScope[0]
-		rctx.Scope = &rawScope
-	}
-	paramUsername := req.Params["username"]
-	if len(paramUsername) > 0 {
-		rawUsername := paramUsername[0]
-		rctx.Username = &rawUsername
-	}
 	return &rctx, err
 }
 

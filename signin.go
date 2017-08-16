@@ -38,11 +38,15 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 	// SigninController_Signin: start_implement
 
 	// Put your logic here
-	if ctx.Username == nil || ctx.Password == nil {
+	username := ctx.RequestData.Request.FormValue("username")
+	password := ctx.RequestData.Request.FormValue("password")
+	scope := ctx.RequestData.Request.FormValue("scope")
+
+	if username == "" || password == "" {
 		return ctx.BadRequest(goa.ErrBadRequest("credentials-required"))
 	}
 
-	user, err := c.UserAPI.FindUser(*ctx.Username, *ctx.Password)
+	user, err := c.UserAPI.FindUser(username, password)
 	if err != nil {
 		return ctx.InternalServerError(goa.ErrInternal(err))
 	}
@@ -52,11 +56,6 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 	key, err := c.KeyStore.GetPrivateKey()
 	if err != nil {
 		return ctx.InternalServerError(goa.ErrInternal(err))
-	}
-
-	scope := ""
-	if ctx.Scope != nil {
-		scope = *ctx.Scope
 	}
 
 	signedToken, err := c.signToken(*user, scope, key)
