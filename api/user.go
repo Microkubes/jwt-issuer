@@ -14,10 +14,13 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// UserAPI defines operations for interacting with the User service API.
 type UserAPI interface {
+	// FindUser performs a lookup for a user by its username and password.
 	FindUser(username, password string) (*User, error)
 }
 
+// NewUserAPI creates a UserAPI with a given configuration and a store.KeyStore.
 func NewUserAPI(config *config.Config, keyStore store.KeyStore) (UserAPI, error) {
 	serviceURL, ok := config.Services["user-microservice"]
 	if !ok {
@@ -32,13 +35,22 @@ func NewUserAPI(config *config.Config, keyStore store.KeyStore) (UserAPI, error)
 	}, nil
 }
 
+// UserAPIClient holds the data for the user microservice client
 type UserAPIClient struct {
+	// UserServiceURL is the base URL of the user microservice. This should be the API gateway exposed URL.
 	UserServiceURL string
+
+	// KeyStore is a reference to the store.KeyStore used for loading private keys
 	store.KeyStore
+
+	// Config is the microservice configuration
 	*config.Config
+
+	// Client is a HTTP clien implementation used for access to the user microservice
 	*http.Client
 }
 
+// FindUser looks up a user by its username and password by calling the ```find``` action of the user microservice.
 func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error) {
 
 	credentials := map[string]string{
@@ -106,6 +118,7 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 	return &user, nil
 }
 
+// toStringArr converts and array of interface{} to a string array
 func toStringArr(val interface{}) []string {
 	intfArr, ok := val.([]interface{})
 	strArr := []string{}
@@ -120,6 +133,8 @@ func toStringArr(val interface{}) []string {
 	return strArr
 }
 
+// selfSignJWT generates a JWT token which is self-signed with the system private key.
+// This token is used for accesing the /user/find API on the user microservice.
 func (userAPI *UserAPIClient) selfSignJWT() (string, error) {
 	sysKey, err := userAPI.KeyStore.GetPrivateKeyByName("system")
 	if err != nil {
