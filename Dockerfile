@@ -16,7 +16,7 @@ RUN go get -u github.com/goadesign/goa/... && \
     go get -u github.com/dgrijalva/jwt-go
 
 RUN go get -u github.com/JormungandrK/microservice-tools; \
-    go get    github.com/JormungandrK/microservice-security; \
+    go get -u github.com/JormungandrK/microservice-security; \
     exit 0
 
 COPY . /go/src/github.com/JormungandrK/jwt-issuer
