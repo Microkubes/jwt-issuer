@@ -3,12 +3,14 @@
 package main
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/JormungandrK/jwt-issuer/api"
 	"github.com/JormungandrK/jwt-issuer/app"
 	"github.com/JormungandrK/jwt-issuer/config"
 	"github.com/JormungandrK/jwt-issuer/store"
+	"github.com/JormungandrK/microservice-tools/gateway"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 )
@@ -32,6 +34,19 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	gatewayURL := os.Getenv("API_GATEWAY_URL")
+	if gatewayURL == "" {
+		gatewayURL = "http://localhost:8001"
+	}
+
+	registration := gateway.NewKongGateway(gatewayURL, &http.Client{}, &config.Microservice)
+	err = registration.SelfRegister()
+	if err != nil {
+		panic(err)
+	}
+
+	defer registration.Unregister()
 	// Create service
 	service := goa.New("jwt-signin")
 
