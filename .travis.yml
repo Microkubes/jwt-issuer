@@ -17,6 +17,9 @@ before_install:
   - go get -u github.com/JormungandrK/microservice-security
   - go get -u github.com/goadesign/goa/...
   - go get -u gopkg.in/mgo.v2
+  - go get -u github.com/afex/hystrix-go/hystrix
+  - go get -u github.com/satori/go.uuid
+  - go get -u go get -u github.com/dgrijalva/jwt-go
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
