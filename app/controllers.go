@@ -13,6 +13,7 @@ package app
 import (
 	"context"
 	"github.com/goadesign/goa"
+	"github.com/goadesign/goa/encoding/form"
 	"net/http"
 )
 
@@ -22,13 +23,11 @@ func initService(service *goa.Service) {
 	service.Encoder.Register(goa.NewJSONEncoder, "application/json")
 	service.Encoder.Register(goa.NewGobEncoder, "application/gob", "application/x-gob")
 	service.Encoder.Register(goa.NewXMLEncoder, "application/xml")
-	service.Decoder.Register(goa.NewJSONDecoder, "application/json")
-	service.Decoder.Register(goa.NewGobDecoder, "application/gob", "application/x-gob")
-	service.Decoder.Register(goa.NewXMLDecoder, "application/xml")
+	service.Decoder.Register(form.NewDecoder, "application/x-www-form-urlencoded")
 
 	// Setup default encoder and decoder
 	service.Encoder.Register(goa.NewJSONEncoder, "*/*")
-	service.Decoder.Register(goa.NewJSONDecoder, "*/*")
+	service.Decoder.Register(form.NewDecoder, "*/*")
 }
 
 // JWTController is the controller interface for the JWT actions.
@@ -52,8 +51,24 @@ func MountJWTController(service *goa.Service, ctrl JWTController) {
 		if err != nil {
 			return err
 		}
+		// Build the payload
+		if rawPayload := goa.ContextRequest(ctx).Payload; rawPayload != nil {
+			rctx.Payload = rawPayload.(*Credentials)
+		} else {
+			return goa.MissingPayloadError()
+		}
 		return ctrl.Signin(rctx)
 	}
-	service.Mux.Handle("POST", "/jwt/signin", ctrl.MuxHandler("signin", h, nil))
+	service.Mux.Handle("POST", "/jwt/signin", ctrl.MuxHandler("signin", h, unmarshalSigninJWTPayload))
 	service.LogInfo("mount", "ctrl", "JWT", "action", "Signin", "route", "POST /jwt/signin")
+}
+
+// unmarshalSigninJWTPayload unmarshals the request body into the context request data Payload field.
+func unmarshalSigninJWTPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
+	payload := &credentials{}
+	if err := service.DecodeRequest(req, payload); err != nil {
+		return err
+	}
+	goa.ContextRequest(ctx).Payload = payload.Publicize()
+	return nil
 }

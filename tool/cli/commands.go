@@ -13,6 +13,7 @@ package cli
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/JormungandrK/jwt-issuer/client"
 	"github.com/goadesign/goa"
 	goaclient "github.com/goadesign/goa/client"
@@ -28,6 +29,8 @@ import (
 type (
 	// SigninJWTCommand is the command line data structure for the signin action of jwt
 	SigninJWTCommand struct {
+		Payload     string
+		ContentType string
 		PrettyPrint bool
 	}
 )
@@ -43,7 +46,16 @@ func RegisterCommands(app *cobra.Command, c *client.Client) {
 	sub = &cobra.Command{
 		Use:   `jwt ["/jwt/signin"]`,
 		Short: `Sign in`,
-		RunE:  func(cmd *cobra.Command, args []string) error { return tmp1.Run(c, args) },
+		Long: `Sign in
+
+Payload example:
+
+{
+   "password": "Sit aut laudantium aut asperiores eos fuga.",
+   "scope": "Quos et aut.",
+   "username": "Iure corrupti id minus et fuga totam."
+}`,
+		RunE: func(cmd *cobra.Command, args []string) error { return tmp1.Run(c, args) },
 	}
 	tmp1.RegisterFlags(sub, c)
 	sub.PersistentFlags().BoolVar(&tmp1.PrettyPrint, "pp", false, "Pretty print response body")
@@ -212,9 +224,16 @@ func (cmd *SigninJWTCommand) Run(c *client.Client, args []string) error {
 	} else {
 		path = "/jwt/signin"
 	}
+	var payload client.Credentials
+	if cmd.Payload != "" {
+		err := json.Unmarshal([]byte(cmd.Payload), &payload)
+		if err != nil {
+			return fmt.Errorf("failed to deserialize payload: %s", err)
+		}
+	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	resp, err := c.SigninJWT(ctx, path)
+	resp, err := c.SigninJWT(ctx, path, &payload)
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -226,4 +245,6 @@ func (cmd *SigninJWTCommand) Run(c *client.Client, args []string) error {
 
 // RegisterFlags registers the command flags with the command line.
 func (cmd *SigninJWTCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
+	cc.Flags().StringVar(&cmd.Payload, "payload", "", "Request body encoded in JSON")
+	cc.Flags().StringVar(&cmd.ContentType, "content", "", "Request content type override, e.g. 'application/x-www-form-urlencoded'")
 }

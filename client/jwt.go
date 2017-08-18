@@ -11,6 +11,7 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"net/http"
@@ -24,8 +25,8 @@ func SigninJWTPath() string {
 }
 
 // Signs in the user and generates JWT token
-func (c *Client) SigninJWT(ctx context.Context, path string) (*http.Response, error) {
-	req, err := c.NewSigninJWTRequest(ctx, path)
+func (c *Client) SigninJWT(ctx context.Context, path string, payload *Credentials) (*http.Response, error) {
+	req, err := c.NewSigninJWTRequest(ctx, path, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -33,15 +34,22 @@ func (c *Client) SigninJWT(ctx context.Context, path string) (*http.Response, er
 }
 
 // NewSigninJWTRequest create the request corresponding to the signin action endpoint of the jwt resource.
-func (c *Client) NewSigninJWTRequest(ctx context.Context, path string) (*http.Request, error) {
+func (c *Client) NewSigninJWTRequest(ctx context.Context, path string, payload *Credentials) (*http.Request, error) {
+	var body bytes.Buffer
+	err := c.Encoder.Encode(payload, &body, "*/*")
+	if err != nil {
+		return nil, fmt.Errorf("failed to encode body: %s", err)
+	}
 	scheme := c.Scheme
 	if scheme == "" {
 		scheme = "http"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
-	req, err := http.NewRequest("POST", u.String(), nil)
+	req, err := http.NewRequest("POST", u.String(), &body)
 	if err != nil {
 		return nil, err
 	}
+	header := req.Header
+	header.Set("Content-Type", "application/x-www-form-urlencoded")
 	return req, nil
 }

@@ -24,11 +24,11 @@ import (
 	"net/url"
 )
 
-// SigninJWTBadRequest runs the method Signin of the given controller with the given parameters.
+// SigninJWTBadRequest runs the method Signin of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController) (http.ResponseWriter, error) {
+func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController, payload *app.Credentials) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -64,6 +64,7 @@ func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa
 	if _err != nil {
 		panic("invalid test data " + _err.Error()) // bug
 	}
+	signinCtx.Payload = payload
 
 	// Perform action
 	_err = ctrl.Signin(signinCtx)
@@ -88,11 +89,11 @@ func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa
 	return rw, mt
 }
 
-// SigninJWTCreated runs the method Signin of the given controller with the given parameters.
+// SigninJWTCreated runs the method Signin of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController) http.ResponseWriter {
+func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController, payload *app.Credentials) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -128,6 +129,7 @@ func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Se
 	if _err != nil {
 		panic("invalid test data " + _err.Error()) // bug
 	}
+	signinCtx.Payload = payload
 
 	// Perform action
 	_err = ctrl.Signin(signinCtx)
@@ -144,11 +146,11 @@ func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Se
 	return rw
 }
 
-// SigninJWTInternalServerError runs the method Signin of the given controller with the given parameters.
+// SigninJWTInternalServerError runs the method Signin of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController) (http.ResponseWriter, error) {
+func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.JWTController, payload *app.Credentials) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -184,6 +186,7 @@ func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, ser
 	if _err != nil {
 		panic("invalid test data " + _err.Error()) // bug
 	}
+	signinCtx.Payload = payload
 
 	// Perform action
 	_err = ctrl.Signin(signinCtx)

@@ -1,9 +1,26 @@
 consumes:
-- application/json
-- application/xml
-- application/gob
-- application/x-gob
+- application/x-www-form-urlencoded
 definitions:
+  Credentials:
+    example:
+      password: Sit aut laudantium aut asperiores eos fuga.
+      scope: Quos et aut.
+      username: Iure corrupti id minus et fuga totam.
+    properties:
+      password:
+        description: 'Credentials: password'
+        example: Sit aut laudantium aut asperiores eos fuga.
+        type: string
+      scope:
+        description: Access scope (api:read, api:write)
+        example: Quos et aut.
+        type: string
+      username:
+        description: 'Credentials: username'
+        example: Iure corrupti id minus et fuga totam.
+        type: string
+    title: Credentials
+    type: object
   error:
     description: Error response media type (default view)
     example:
@@ -51,6 +68,12 @@ paths:
     post:
       description: Signs in the user and generates JWT token
       operationId: jwt#signin
+      parameters:
+      - in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/Credentials'
       produces:
       - application/vnd.goa.error
       - application/vnd.goa.error
