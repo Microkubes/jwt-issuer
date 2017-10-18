@@ -5,8 +5,8 @@
     "expiryTime": 30000
   },
   "keys": {
-    "default": "./keys/rsa_default",
-    "system": "./keys/rsa_system"
+    "default": "/run/secrets/default",
+    "system": "/run/secrets/system"
   },
   "microservice": {
     "name": "jwt-issuer",
