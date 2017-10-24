@@ -9,4 +9,4 @@ push: build
 	docker push ${IMAGE}
 
 run: build
-	docker run -p 8080:8080 ${IMAGE}
+	docker run ${ARGS} ${IMAGE}
