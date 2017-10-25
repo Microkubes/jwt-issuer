@@ -69,3 +69,5 @@ The service is configured using a JSON file with the following structure:
 }
 
 ```
+
+Default path is /run/secrets/microservice_apps_management_config.json. To change the path set the **SERVICE_CONFIG_FILE** env var.
