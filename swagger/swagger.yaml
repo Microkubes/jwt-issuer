@@ -64,7 +64,7 @@ info:
   title: JWT Sign in
   version: "1.0"
 paths:
-  /jwt/signin:
+  /signin:
     post:
       description: Signs in the user and generates JWT token
       operationId: jwt#signin

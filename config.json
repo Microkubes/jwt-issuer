@@ -11,12 +11,13 @@
   "microservice": {
     "name": "jwt-issuer",
     "port": 8080,
+    "paths": ["/jwt"],
     "virtual_host": "jwt.auth.jormugandr.org",
     "hosts": ["localhost", "jwt.auth.jormugandr.org"],
     "weight": 10,
     "slots": 100
   },
   "services": {
-    "user-microservice": "http://localhost:8001/user"
+    "user-microservice": "http://kong:8000/users"
   }
 }
