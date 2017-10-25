@@ -16,13 +16,17 @@ import (
 )
 
 func main() {
+	// Create service
+	service := goa.New("jwt-signin")
+
 	cf := os.Getenv("SERVICE_CONFIG_FILE")
 	if cf == "" {
-		cf = "config.json"
+		cf = "/run/secrets/microservice_jwt_issuer_config.json"
 	}
 	config, err := config.LoadConfig(cf)
 	if err != nil {
-		panic(err)
+		service.LogError("config", "err", err)
+		return
 	}
 
 	keyStore, err := store.NewFileKeyStore(config.Keys)
@@ -47,8 +51,6 @@ func main() {
 	}
 
 	defer registration.Unregister()
-	// Create service
-	service := goa.New("jwt-signin")
 
 	// Mount middleware
 	service.Use(middleware.RequestID())
