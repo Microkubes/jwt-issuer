@@ -31,6 +31,7 @@ var _ = Resource("jwt", func() {
 
 })
 
+// CredentialsPayload defines the credentials payload
 var CredentialsPayload = Type("Credentials", func() {
 	Attribute("username", String, "Credentials: username")
 	Attribute("password", String, "Credentials: password")
