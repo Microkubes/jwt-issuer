@@ -13,7 +13,6 @@
     "port": 8080,
     "paths": ["/jwt"],
     "virtual_host": "jwt.auth.jormugandr.org",
-    "hosts": ["localhost", "jwt.auth.jormugandr.org"],
     "weight": 10,
     "slots": 100
   },
