@@ -41,7 +41,7 @@ func main() {
 
 	gatewayURL := os.Getenv("API_GATEWAY_URL")
 	if gatewayURL == "" {
-		gatewayURL = "http://localhost:8001"
+		gatewayURL = "http://kong:8001"
 	}
 
 	registration := gateway.NewKongGateway(gatewayURL, &http.Client{}, &config.Microservice)

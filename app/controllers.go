@@ -59,8 +59,8 @@ func MountJWTController(service *goa.Service, ctrl JWTController) {
 		}
 		return ctrl.Signin(rctx)
 	}
-	service.Mux.Handle("POST", "/signin", ctrl.MuxHandler("signin", h, unmarshalSigninJWTPayload))
-	service.LogInfo("mount", "ctrl", "JWT", "action", "Signin", "route", "POST /signin")
+	service.Mux.Handle("POST", "/jwt/signin", ctrl.MuxHandler("signin", h, unmarshalSigninJWTPayload))
+	service.LogInfo("mount", "ctrl", "JWT", "action", "Signin", "route", "POST /jwt/signin")
 }
 
 // unmarshalSigninJWTPayload unmarshals the request body into the context request data Payload field.

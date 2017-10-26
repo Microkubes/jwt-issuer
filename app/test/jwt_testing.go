@@ -49,7 +49,7 @@ func SigninJWTBadRequest(t goatest.TInterface, ctx context.Context, service *goa
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/signin"),
+		Path: fmt.Sprintf("/jwt/signin"),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -114,7 +114,7 @@ func SigninJWTCreated(t goatest.TInterface, ctx context.Context, service *goa.Se
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/signin"),
+		Path: fmt.Sprintf("/jwt/signin"),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -171,7 +171,7 @@ func SigninJWTInternalServerError(t goatest.TInterface, ctx context.Context, ser
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/signin"),
+		Path: fmt.Sprintf("/jwt/signin"),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
