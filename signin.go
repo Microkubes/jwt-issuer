@@ -46,6 +46,10 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 		return ctx.BadRequest(goa.ErrBadRequest("credentials-required"))
 	}
 
+	if scope == nil {
+		return ctx.BadRequest(goa.ErrBadRequest("scope-required"))
+	}
+
 	user, err := c.UserAPI.FindUser(*username, *password)
 	if err != nil {
 		return ctx.InternalServerError(goa.ErrInternal(err))
