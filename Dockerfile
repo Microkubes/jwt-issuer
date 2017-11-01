@@ -3,21 +3,14 @@ FROM golang:1.8.3-alpine3.6 as build
 
 RUN apk --no-cache add git curl openssh
 
-COPY keys/id_rsa /root/.ssh/id_rsa
-RUN chmod 700 /root/.ssh/id_rsa && \
-    echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config && \
-    git config --global url."ssh://git@github.com:".insteadOf "https://github.com"
-
-RUN go get -u github.com/goadesign/goa/... && \
-    go get -u gopkg.in/mgo.v2 && \
-    go get -u golang.org/x/crypto/bcrypt && \
-    go get -u github.com/afex/hystrix-go/hystrix && \
-    go get -u github.com/satori/go.uuid && \
-    go get -u github.com/dgrijalva/jwt-go
-
-RUN go get -u github.com/JormungandrK/microservice-tools; \
-    go get -u github.com/JormungandrK/microservice-security/...; \
-    exit 0
+RUN go get -u -v github.com/goadesign/goa/... && \
+    go get -u -v gopkg.in/mgo.v2 && \
+    go get -u -v golang.org/x/crypto/bcrypt && \
+    go get -u -v github.com/afex/hystrix-go/hystrix && \
+    go get -u -v github.com/satori/go.uuid && \
+    go get -u -v github.com/dgrijalva/jwt-go && \
+    go get -u -v github.com/JormungandrK/microservice-tools && \
+    go get -u -v github.com/JormungandrK/microservice-security/...
 
 COPY . /go/src/github.com/JormungandrK/jwt-issuer
 RUN go install github.com/JormungandrK/jwt-issuer
