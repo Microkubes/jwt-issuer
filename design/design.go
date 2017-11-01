@@ -33,7 +33,7 @@ var _ = Resource("jwt", func() {
 
 // CredentialsPayload defines the credentials payload
 var CredentialsPayload = Type("Credentials", func() {
-	Attribute("username", String, "Credentials: username")
+	Attribute("email", String, "Credentials: email")
 	Attribute("password", String, "Credentials: password")
 	Attribute("scope", String, "Access scope (api:read, api:write)")
 })

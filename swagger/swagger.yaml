@@ -3,20 +3,20 @@ consumes:
 definitions:
   Credentials:
     example:
-      password: Sit aut laudantium aut asperiores eos fuga.
-      scope: Quos et aut.
-      username: Iure corrupti id minus et fuga totam.
+      email: Sit aut laudantium aut asperiores eos fuga.
+      password: Quos et aut.
+      scope: Iure corrupti id minus et fuga totam.
     properties:
+      email:
+        description: 'Credentials: email'
+        example: Sit aut laudantium aut asperiores eos fuga.
+        type: string
       password:
         description: 'Credentials: password'
-        example: Sit aut laudantium aut asperiores eos fuga.
+        example: Quos et aut.
         type: string
       scope:
         description: Access scope (api:read, api:write)
-        example: Quos et aut.
-        type: string
-      username:
-        description: 'Credentials: username'
         example: Iure corrupti id minus et fuga totam.
         type: string
     title: Credentials
@@ -75,7 +75,6 @@ paths:
         schema:
           $ref: '#/definitions/Credentials'
       produces:
-      - application/vnd.goa.error
       - application/vnd.goa.error
       responses:
         "201":

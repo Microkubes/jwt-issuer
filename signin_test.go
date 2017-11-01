@@ -39,11 +39,11 @@ func NewMockKeyStore() *MockKeyStore {
 }
 
 type MockUserAPI struct {
-	Handler func(username, password string) (*api.User, error)
+	Handler func(email, password string) (*api.User, error)
 }
 
-func (m *MockUserAPI) FindUser(username, password string) (*api.User, error) {
-	return m.Handler(username, password)
+func (m *MockUserAPI) FindUser(email, password string) (*api.User, error) {
+	return m.Handler(email, password)
 }
 
 func TestSigninJWTCreated(t *testing.T) {
@@ -75,15 +75,14 @@ func TestSigninJWTCreated(t *testing.T) {
 				ID:            "000000000001",
 				Organizations: []string{"org1", "org2"},
 				Roles:         []string{"user"},
-				Username:      user,
 			}, nil
 		},
 	}, NewMockKeyStore(), config)
-	user := "someuser"
+	email := "someuser@test.com"
 	pass := "pass"
 	scope := "api:read"
 	test.SigninJWTCreated(t, context.Background(), service, controller, &app.Credentials{
-		Username: &user,
+		Email:    &email,
 		Password: &pass,
 		Scope:    &scope,
 	})
@@ -111,15 +110,15 @@ func TestSigninJWTBadRequest(t *testing.T) {
 	service := goa.New("signin")
 
 	controller := NewSigninController(service, &MockUserAPI{
-		Handler: func(user, pass string) (*api.User, error) {
-			return nil, nil // Username not found
+		Handler: func(email, pass string) (*api.User, error) {
+			return nil, nil // User not found
 		},
 	}, NewMockKeyStore(), config)
-	user := "someuser"
+	email := "someuser@test.com"
 	pass := "pass"
 	scope := "api:read"
 	test.SigninJWTBadRequest(t, context.Background(), service, controller, &app.Credentials{
-		Username: &user,
+		Email:    &email,
 		Password: &pass,
 		Scope:    &scope,
 	})
@@ -151,12 +150,12 @@ func TestSigninJWTInternalServerError(t *testing.T) {
 			return nil, fmt.Errorf("Test Error :)") // Return an error to cause internal server error
 		},
 	}, NewMockKeyStore(), config)
-	user := "someuser"
+	email := "someuser@test.com"
 	pass := "pass"
 	scope := "api:read"
 
 	test.SigninJWTInternalServerError(t, context.Background(), service, controller, &app.Credentials{
-		Username: &user,
+		Email:    &email,
 		Password: &pass,
 		Scope:    &scope,
 	})
