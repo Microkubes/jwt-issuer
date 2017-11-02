@@ -38,15 +38,15 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 	// SigninController_Signin: start_implement
 
 	// Put your logic here
-	username := ctx.Payload.Username //ctx.RequestData.Request.FormValue("username")
+	email := ctx.Payload.Email //ctx.RequestData.Request.FormValue("email")
 	password := ctx.Payload.Password
 	scope := ctx.Payload.Scope //ctx.RequestData.Request.FormValue("scope")
 
-	if username == nil || password == nil {
-		return ctx.BadRequest(goa.ErrBadRequest("credentials-required"))
+	if email == nil || password == nil || scope == nil {
+		return ctx.BadRequest(goa.ErrBadRequest("credentials-required: email, password, scope"))
 	}
 
-	user, err := c.UserAPI.FindUser(*username, *password)
+	user, err := c.UserAPI.FindUser(*email, *password)
 	if err != nil {
 		return ctx.InternalServerError(goa.ErrInternal(err))
 	}
@@ -84,7 +84,7 @@ func (c *SigninController) signToken(user api.User, scope string, key interface{
 
 	// non-standard claims
 	claims["userId"] = user.ID
-	claims["username"] = user.Username
+	claims["username"] = user.Email
 	claims["roles"] = strings.Join(user.Roles[:], ",")
 	claims["organizations"] = strings.Join(user.Organizations[:], ",")
 

@@ -115,10 +115,9 @@ func TestFindUser(t *testing.T) {
 	gock.New("http://user.services.jormungandr.org:8001").
 		Post("/user/find").
 		MatchType("json").
-		JSON(map[string]string{"username": "some-user", "password": "a-password"}).
+		JSON(map[string]string{"email": "some-mail", "password": "a-password"}).
 		Reply(200).JSON(map[string]interface{}{
 		"id":            "000000000001",
-		"username":      "some-user",
 		"email":         "email@example.com",
 		"organizations": []string{"org1", "org2"},
 		"roles":         []string{"user", "admin"},
@@ -126,7 +125,7 @@ func TestFindUser(t *testing.T) {
 
 	gock.InterceptClient(client)
 
-	user, err := userAPI.FindUser("some-user", "a-password")
+	user, err := userAPI.FindUser("some-mail", "a-password")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,9 +134,6 @@ func TestFindUser(t *testing.T) {
 	}
 	if user.Email != "email@example.com" {
 		t.Fatal("Email does not match expected")
-	}
-	if user.Username != "some-user" {
-		t.Fatal("Username does not match expected")
 	}
 	if user.ID != "000000000001" {
 		t.Fatal("ID does not match expected")
