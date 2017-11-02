@@ -51,9 +51,9 @@ func RegisterCommands(app *cobra.Command, c *client.Client) {
 Payload example:
 
 {
-   "password": "Sit aut laudantium aut asperiores eos fuga.",
-   "scope": "Quos et aut.",
-   "username": "Iure corrupti id minus et fuga totam."
+   "email": "Sit aut laudantium aut asperiores eos fuga.",
+   "password": "Quos et aut.",
+   "scope": "Iure corrupti id minus et fuga totam."
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp1.Run(c, args) },
 	}

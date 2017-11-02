@@ -16,8 +16,8 @@ import (
 
 // UserAPI defines operations for interacting with the User service API.
 type UserAPI interface {
-	// FindUser performs a lookup for a user by its username and password.
-	FindUser(username, password string) (*User, error)
+	// FindUser performs a lookup for a user by its email and password.
+	FindUser(email, password string) (*User, error)
 }
 
 // NewUserAPI creates a UserAPI with a given configuration and a store.KeyStore.
@@ -50,11 +50,11 @@ type UserAPIClient struct {
 	*http.Client
 }
 
-// FindUser looks up a user by its username and password by calling the ```find``` action of the user microservice.
-func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error) {
+// FindUser looks up a user by its email and password by calling the ```find``` action of the user microservice.
+func (userAPI *UserAPIClient) FindUser(email, password string) (*User, error) {
 
 	credentials := map[string]string{
-		"username": username,
+		"email":    email,
 		"password": password,
 	}
 
@@ -102,9 +102,8 @@ func (userAPI *UserAPIClient) FindUser(username, password string) (*User, error)
 		return nil, err
 	}
 	user := User{
-		ID:       (*userResp)["id"].(string),
-		Username: (*userResp)["username"].(string),
-		Email:    (*userResp)["email"].(string),
+		ID:    (*userResp)["id"].(string),
+		Email: (*userResp)["email"].(string),
 	}
 	roles, ok := (*userResp)["roles"]
 	if ok {
