@@ -114,6 +114,13 @@ func (userAPI *UserAPIClient) FindUser(email, password string) (*User, error) {
 	if ok {
 		user.Organizations = toStringArr(organizations)
 	}
+	if active, ok := (*userResp)["active"]; ok {
+		if active != nil {
+			if _, ok := active.(bool); ok {
+				user.Active = active.(bool)
+			}
+		}
+	}
 	return &user, nil
 }
 

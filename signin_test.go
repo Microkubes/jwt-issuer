@@ -75,6 +75,7 @@ func TestSigninJWTCreated(t *testing.T) {
 				ID:            "000000000001",
 				Organizations: []string{"org1", "org2"},
 				Roles:         []string{"user"},
+				Active:        true,
 			}, nil
 		},
 	}, NewMockKeyStore(), config)
