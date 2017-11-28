@@ -58,6 +58,11 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 	if user == nil {
 		return ctx.BadRequest(goa.ErrBadRequest("invalid-credentials"))
 	}
+
+	if !user.Active {
+		return ctx.BadRequest(goa.ErrBadRequest("account-not-activated"))
+	}
+
 	key, err := c.KeyStore.GetPrivateKey()
 	if err != nil {
 		return ctx.InternalServerError(goa.ErrInternal(err))
