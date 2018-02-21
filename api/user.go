@@ -148,10 +148,14 @@ func (userAPI *UserAPIClient) selfSignJWT() (string, error) {
 	}
 	signingMethod := userAPI.Config.Jwt.SigningMethod
 
+	randUUID, err := uuid.NewV4()
+	if err != nil {
+		return "", err
+	}
 	claims := map[string]interface{}{
 		"iss":      userAPI.Config.Jwt.Issuer,
 		"exp":      time.Now().Add(time.Duration(30) * time.Second).Unix(),
-		"jti":      uuid.NewV4().String(),
+		"jti":      randUUID.String(),
 		"nbf":      0,
 		"sub":      "jwt-issuer",
 		"scope":    "api:read",

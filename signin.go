@@ -81,8 +81,12 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 
 func (c *SigninController) signToken(user api.User, scope string, key interface{}) (string, error) {
 	claims := map[string]interface{}{}
+	randUUID, err := uuid.NewV4()
+	if err != nil {
+		return "", err
+	}
 	// standard claims
-	claims["jti"] = uuid.NewV4().String()
+	claims["jti"] = randUUID.String()
 	claims["iss"] = c.Config.Jwt.Issuer
 	claims["exp"] = time.Now().Add(time.Duration(c.Config.Jwt.ExpiryTime) * time.Millisecond).Unix()
 	claims["iat"] = time.Now().Unix()
