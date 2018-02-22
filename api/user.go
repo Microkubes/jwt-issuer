@@ -114,6 +114,9 @@ func (userAPI *UserAPIClient) FindUser(email, password string) (*User, error) {
 	if ok {
 		user.Organizations = toStringArr(organizations)
 	}
+	if namespaces, ok := (*userResp)["namespaces"]; ok {
+		user.Namespaces = toStringArr(namespaces)
+	}
 	if active, ok := (*userResp)["active"]; ok {
 		if active != nil {
 			if _, ok := active.(bool); ok {

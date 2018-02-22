@@ -101,6 +101,9 @@ func (c *SigninController) signToken(user api.User, scope string, key interface{
 	claims["username"] = user.Email
 	claims["roles"] = strings.Join(user.Roles[:], ",")
 	claims["organizations"] = strings.Join(user.Organizations[:], ",")
+	if user.Namespaces != nil {
+		claims["namespaces"] = strings.Join(user.Namespaces, ",")
+	}
 
 	return jwt.SignToken(claims, c.Config.Jwt.SigningMethod, key)
 }
