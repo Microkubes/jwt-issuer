@@ -7,4 +7,5 @@ type User struct {
 	Organizations []string `json:"organizations,omitempty"`
 	Roles         []string `json:"roles,omitempty"`
 	Active        bool     `json:"active"`
+	Namespaces    []string `json:"namespaces"`
 }
