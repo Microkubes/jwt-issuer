@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/JormungandrK/jwt-issuer/config"
-	"github.com/JormungandrK/microservice-tools/gateway"
+	"github.com/Microkubes/jwt-issuer/config"
+	"github.com/Microkubes/microservice-tools/gateway"
 
 	gock "gopkg.in/h2non/gock.v1"
 )

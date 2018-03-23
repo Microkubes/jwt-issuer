@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/JormungandrK/jwt-issuer/client"
-	"github.com/JormungandrK/jwt-issuer/tool/cli"
+	"github.com/Microkubes/jwt-issuer/client"
+	"github.com/Microkubes/jwt-issuer/tool/cli"
 	goaclient "github.com/goadesign/goa/client"
 	"github.com/spf13/cobra"
 	"net/http"

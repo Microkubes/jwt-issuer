@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/JormungandrK/jwt-issuer/app"
+	"github.com/Microkubes/jwt-issuer/app"
 	"github.com/goadesign/goa"
 )
 

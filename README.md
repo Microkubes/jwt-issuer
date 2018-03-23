@@ -1,7 +1,7 @@
 JWT Token Issuer
 ================
 
-[![Build](https://travis-ci.com/JormungandrK/jwt-issuer.svg?token=UB5yzsLHNSbtjSYrGbWf&branch=master)](https://travis-ci.com/JormungandrK/jwt-issuer)
+[![Build](https://travis-ci.com/Microkubes/jwt-issuer.svg?token=UB5yzsLHNSbtjSYrGbWf&branch=master)](https://travis-ci.com/Microkubes/jwt-issuer)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7b8eb0b65c625e8ceb7c/test_coverage)](https://codeclimate.com/repos/59e7253fb82c7d02d200155a/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7b8eb0b65c625e8ceb7c/maintainability)](https://codeclimate.com/repos/59e7253fb82c7d02d200155a/maintainability)
 

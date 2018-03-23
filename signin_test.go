@@ -8,11 +8,11 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/JormungandrK/jwt-issuer/api"
-	"github.com/JormungandrK/jwt-issuer/app"
-	"github.com/JormungandrK/jwt-issuer/app/test"
-	"github.com/JormungandrK/jwt-issuer/config"
-	"github.com/JormungandrK/microservice-tools/gateway"
+	"github.com/Microkubes/jwt-issuer/api"
+	"github.com/Microkubes/jwt-issuer/app"
+	"github.com/Microkubes/jwt-issuer/app/test"
+	"github.com/Microkubes/jwt-issuer/config"
+	"github.com/Microkubes/microservice-tools/gateway"
 	"github.com/goadesign/goa"
 )
 

@@ -1,4 +1,4 @@
-//go:generate goagen bootstrap -d github.com/JormungandrK/jwt-issuer/design
+//go:generate goagen bootstrap -d github.com/Microkubes/jwt-issuer/design
 
 package main
 
@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/JormungandrK/jwt-issuer/api"
-	"github.com/JormungandrK/jwt-issuer/app"
-	"github.com/JormungandrK/jwt-issuer/config"
-	"github.com/JormungandrK/jwt-issuer/store"
-	"github.com/JormungandrK/microservice-tools/gateway"
+	"github.com/Microkubes/jwt-issuer/api"
+	"github.com/Microkubes/jwt-issuer/app"
+	"github.com/Microkubes/jwt-issuer/config"
+	"github.com/Microkubes/jwt-issuer/store"
+	"github.com/Microkubes/microservice-tools/gateway"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 )

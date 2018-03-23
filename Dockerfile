@@ -1,8 +1,8 @@
 ### Multi-stage build
 FROM jormungandrk/goa-build as build
 
-COPY . /go/src/github.com/JormungandrK/jwt-issuer
-RUN go install github.com/JormungandrK/jwt-issuer
+COPY . /go/src/github.com/Microkubes/jwt-issuer
+RUN go install github.com/Microkubes/jwt-issuer
 
 
 ### Main

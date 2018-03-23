@@ -5,11 +5,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/JormungandrK/jwt-issuer/api"
-	"github.com/JormungandrK/jwt-issuer/app"
-	"github.com/JormungandrK/jwt-issuer/config"
-	"github.com/JormungandrK/jwt-issuer/store"
-	"github.com/JormungandrK/microservice-security/jwt"
+	"github.com/Microkubes/jwt-issuer/api"
+	"github.com/Microkubes/jwt-issuer/app"
+	"github.com/Microkubes/jwt-issuer/config"
+	"github.com/Microkubes/jwt-issuer/store"
+	"github.com/Microkubes/microservice-security/jwt"
 
 	"github.com/goadesign/goa"
 	uuid "github.com/satori/go.uuid"

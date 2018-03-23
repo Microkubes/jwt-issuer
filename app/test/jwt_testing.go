@@ -4,8 +4,8 @@
 //
 // Command:
 // $ goagen
-// --design=github.com/JormungandrK/jwt-issuer/design
-// --out=$(GOPATH)/src/github.com/JormungandrK/jwt-issuer
+// --design=github.com/Microkubes/jwt-issuer/design
+// --out=$(GOPATH)/src/github.com/Microkubes/jwt-issuer
 // --version=v1.2.0-dirty
 
 package test
@@ -14,7 +14,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/JormungandrK/jwt-issuer/app"
+	"github.com/Microkubes/jwt-issuer/app"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/goatest"
 	"io"
