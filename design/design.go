@@ -26,7 +26,7 @@ var _ = Resource("jwt", func() {
 		Routing(POST("/signin"))
 		Response(BadRequest, ErrorMedia)
 		Response(InternalServerError, ErrorMedia)
-		Response(Created)
+		Response(Created, String)
 	})
 
 })

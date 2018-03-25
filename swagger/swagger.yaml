@@ -97,9 +97,6 @@ produces:
 - application/xml
 - application/gob
 - application/x-gob
-responses:
-  Created:
-    description: Created
 schemes:
 - http
 swagger: "2.0"

@@ -73,10 +73,12 @@ func (c *SigninController) Signin(ctx *app.SigninJWTContext) error {
 		return ctx.BadRequest(goa.ErrBadRequest(err))
 	}
 
-	ctx.ResponseData.Header().Add("Authorization", fmt.Sprintf("Bearer %s", signedToken))
+	bearerToken := fmt.Sprintf("Bearer %s", signedToken)
+
+	ctx.ResponseData.Header().Add("Authorization", bearerToken)
 
 	// SigninController_Signin: end_implement
-	return ctx.Created()
+	return ctx.Created(bearerToken)
 }
 
 func (c *SigninController) signToken(user api.User, scope string, key interface{}) (string, error) {
