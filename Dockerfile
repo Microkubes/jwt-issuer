@@ -9,15 +9,18 @@ RUN go get -u -v github.com/goadesign/goa/... && \
     go get -u -v github.com/Microkubes/microservice-tools/...
 
 COPY . /go/src/github.com/Microkubes/jwt-issuer
+
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install github.com/Microkubes/jwt-issuer
 
 
 ### Main
 FROM scratch
 
-COPY --from=build /go/bin/jwt-issuer /jwt-issuer
-EXPOSE 8080
-
 ENV API_GATEWAY_URL="http://localhost:8001"
+
+COPY --from=build /go/src/github.com/Microkubes/jwt-issuer/config.json /config.json
+COPY --from=build /go/bin/jwt-issuer /jwt-issuer
+
+EXPOSE 8080
 
 CMD ["/jwt-issuer"]

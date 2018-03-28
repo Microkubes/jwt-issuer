@@ -2,7 +2,7 @@
   "jwt":{
     "issuer": "Jormungandr JWT Authority",
     "signingMethod": "RS512",
-    "expiryTime": 30000
+    "expiryTime": 86400000
   },
   "keys": {
     "default": "/run/secrets/default",
@@ -12,7 +12,7 @@
     "name": "jwt-issuer",
     "port": 8080,
     "paths": ["/jwt"],
-    "virtual_host": "jwt.auth.jormugandr.org",
+    "virtual_host": "jwt-issuer.service.consul",
     "weight": 10,
     "slots": 100
   },
