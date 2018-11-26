@@ -13,11 +13,11 @@ package app
 // credentials user type.
 type credentials struct {
 	// Credentials: email
-	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
+	Email *string `form:"email,omitempty" json:"email,omitempty" yaml:"email,omitempty" xml:"email,omitempty"`
 	// Credentials: password
-	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
+	Password *string `form:"password,omitempty" json:"password,omitempty" yaml:"password,omitempty" xml:"password,omitempty"`
 	// Access scope (api:read, api:write)
-	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty" yaml:"scope,omitempty" xml:"scope,omitempty"`
 }
 
 // Publicize creates Credentials from credentials
@@ -38,9 +38,9 @@ func (ut *credentials) Publicize() *Credentials {
 // Credentials user type.
 type Credentials struct {
 	// Credentials: email
-	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
+	Email *string `form:"email,omitempty" json:"email,omitempty" yaml:"email,omitempty" xml:"email,omitempty"`
 	// Credentials: password
-	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
+	Password *string `form:"password,omitempty" json:"password,omitempty" yaml:"password,omitempty" xml:"password,omitempty"`
 	// Access scope (api:read, api:write)
-	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty" yaml:"scope,omitempty" xml:"scope,omitempty"`
 }
