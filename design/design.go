@@ -20,6 +20,10 @@ var _ = Resource("jwt", func() {
 	BasePath("/jwt")
 	Description("Sign in")
 
+	Origin("*", func() {
+		Methods("OPTIONS")
+	})
+
 	Action("signin", func() {
 		Description("Signs in the user and generates JWT token")
 		Payload(CredentialsPayload)

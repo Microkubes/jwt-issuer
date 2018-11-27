@@ -13,6 +13,7 @@ package app
 import (
 	"context"
 	"github.com/goadesign/goa"
+	"github.com/goadesign/goa/cors"
 	"github.com/goadesign/goa/encoding/form"
 	"net/http"
 )
@@ -40,6 +41,7 @@ type JWTController interface {
 func MountJWTController(service *goa.Service, ctrl JWTController) {
 	initService(service)
 	var h goa.Handler
+	service.Mux.Handle("OPTIONS", "/jwt/signin", ctrl.MuxHandler("preflight", handleJWTOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -59,8 +61,33 @@ func MountJWTController(service *goa.Service, ctrl JWTController) {
 		}
 		return ctrl.Signin(rctx)
 	}
+	h = handleJWTOrigin(h)
 	service.Mux.Handle("POST", "/jwt/signin", ctrl.MuxHandler("signin", h, unmarshalSigninJWTPayload))
 	service.LogInfo("mount", "ctrl", "JWT", "action", "Signin", "route", "POST /jwt/signin")
+}
+
+// handleJWTOrigin applies the CORS response headers corresponding to the origin.
+func handleJWTOrigin(h goa.Handler) goa.Handler {
+
+	return func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		origin := req.Header.Get("Origin")
+		if origin == "" {
+			// Not a CORS request
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "*") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Access-Control-Allow-Credentials", "false")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "OPTIONS")
+			}
+			return h(ctx, rw, req)
+		}
+
+		return h(ctx, rw, req)
+	}
 }
 
 // unmarshalSigninJWTPayload unmarshals the request body into the context request data Payload field.
