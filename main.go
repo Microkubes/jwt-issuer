@@ -11,6 +11,8 @@ import (
 	"github.com/Microkubes/jwt-issuer/config"
 	"github.com/Microkubes/jwt-issuer/store"
 	"github.com/Microkubes/microservice-tools/gateway"
+	"github.com/Microkubes/microservice-tools/utils/healthcheck"
+	"github.com/Microkubes/microservice-tools/utils/version"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 )
@@ -57,6 +59,10 @@ func main() {
 	service.Use(middleware.LogRequest(true))
 	service.Use(middleware.ErrorHandler(service, true))
 	service.Use(middleware.Recover())
+
+	service.Use(healthcheck.NewCheckMiddleware("/healthcheck"))
+
+	service.Use(version.NewVersionMiddleware(config.Version, "/version"))
 
 	// Mount "signin" controller
 	c := NewSigninController(service, userAPI, keyStore, config)

@@ -34,6 +34,8 @@ type Config struct {
 	//   "system": "keys/internal.system.key.rsa.priv"
 	// }
 	Keys map[string]string `json:"keys"`
+	//Version is version of the service
+	Version string `json:"version"`
 }
 
 // LoadConfig loads a Config from a configuration JSON file.
