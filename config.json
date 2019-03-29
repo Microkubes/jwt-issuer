@@ -18,5 +18,6 @@
   },
   "services": {
     "user-microservice": "http://kong:8000/users"
-  }
+  },
+  "version": "v1.0.1-beta"
 }
