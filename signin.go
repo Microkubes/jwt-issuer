@@ -11,7 +11,7 @@ import (
 	"github.com/Microkubes/jwt-issuer/store"
 	"github.com/Microkubes/microservice-security/jwt"
 
-	"github.com/goadesign/goa"
+	"github.com/keitaroinc/goa"
 	uuid "github.com/satori/go.uuid"
 )
 

@@ -13,7 +13,7 @@ import (
 	"github.com/Microkubes/jwt-issuer/app/test"
 	"github.com/Microkubes/jwt-issuer/config"
 	"github.com/Microkubes/microservice-tools/gateway"
-	"github.com/goadesign/goa"
+	"github.com/keitaroinc/goa"
 )
 
 type MockKeyStore struct {
