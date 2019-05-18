@@ -11,9 +11,9 @@
 package client
 
 import (
-	"github.com/goadesign/goa"
-	goaclient "github.com/goadesign/goa/client"
-	"github.com/goadesign/goa/encoding/form"
+	"github.com/keitaroinc/goa"
+	goaclient "github.com/keitaroinc/goa/client"
+	"github.com/keitaroinc/goa/encoding/form"
 )
 
 // Client is the jwt-signin service client.

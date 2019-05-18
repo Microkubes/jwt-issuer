@@ -1,8 +1,8 @@
 package design
 
 import (
-	. "github.com/goadesign/goa/design"
-	. "github.com/goadesign/goa/design/apidsl"
+	. "github.com/keitaroinc/goa/design"
+	. "github.com/keitaroinc/goa/design/apidsl"
 )
 
 var _ = API("jwt-signin", func() {
@@ -12,7 +12,7 @@ var _ = API("jwt-signin", func() {
 	Scheme("http")
 	Host("localhost:8080")
 	Consumes("application/x-www-form-urlencoded", func() {
-		Package("github.com/goadesign/goa/encoding/form")
+		Package("github.com/keitaroinc/goa/encoding/form")
 	})
 })
 

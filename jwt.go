@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Microkubes/jwt-issuer/app"
-	"github.com/goadesign/goa"
+	"github.com/keitaroinc/goa"
 )
 
 // JWTController implements the jwt resource.
