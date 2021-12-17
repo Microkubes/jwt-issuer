@@ -12,8 +12,6 @@ RUN cd /go/src/github.com/Microkubes/jwt-issuer && \
 ### Main
 FROM alpine:3.10
 
-ENV API_GATEWAY_URL="http://localhost:8001"
-
 COPY --from=build /go/src/github.com/Microkubes/jwt-issuer/config.json /config.json
 COPY --from=build /go/bin/jwt-issuer /jwt-issuer
 

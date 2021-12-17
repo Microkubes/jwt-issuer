@@ -3,14 +3,12 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/Microkubes/jwt-issuer/api"
 	"github.com/Microkubes/jwt-issuer/app"
 	"github.com/Microkubes/jwt-issuer/config"
 	"github.com/Microkubes/jwt-issuer/store"
-	"github.com/Microkubes/microservice-tools/gateway"
 	"github.com/Microkubes/microservice-tools/utils/healthcheck"
 	"github.com/Microkubes/microservice-tools/utils/version"
 	"github.com/keitaroinc/goa"
@@ -40,19 +38,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	gatewayURL := os.Getenv("API_GATEWAY_URL")
-	if gatewayURL == "" {
-		gatewayURL = "http://kong:8001"
-	}
-
-	registration := gateway.NewKongGateway(gatewayURL, &http.Client{}, &config.Microservice)
-	err = registration.SelfRegister()
-	if err != nil {
-		panic(err)
-	}
-
-	defer registration.Unregister()
 
 	// Mount middleware
 	service.Use(middleware.RequestID())
