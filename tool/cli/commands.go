@@ -44,7 +44,7 @@ func RegisterCommands(app *cobra.Command, c *client.Client) {
 	}
 	tmp1 := new(SigninJWTCommand)
 	sub = &cobra.Command{
-		Use:   `jwt ["/jwt/signin"]`,
+		Use:   `jwt ["/signin"]`,
 		Short: `Sign in`,
 		Long: `Sign in
 
@@ -222,7 +222,7 @@ func (cmd *SigninJWTCommand) Run(c *client.Client, args []string) error {
 	if len(args) > 0 {
 		path = args[0]
 	} else {
-		path = "/jwt/signin"
+		path = "/signin"
 	}
 	var payload client.Credentials
 	if cmd.Payload != "" {

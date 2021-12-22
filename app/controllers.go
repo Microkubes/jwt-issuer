@@ -41,7 +41,7 @@ type JWTController interface {
 func MountJWTController(service *goa.Service, ctrl JWTController) {
 	initService(service)
 	var h goa.Handler
-	service.Mux.Handle("OPTIONS", "/jwt/signin", ctrl.MuxHandler("preflight", handleJWTOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/signin", ctrl.MuxHandler("preflight", handleJWTOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -62,8 +62,8 @@ func MountJWTController(service *goa.Service, ctrl JWTController) {
 		return ctrl.Signin(rctx)
 	}
 	h = handleJWTOrigin(h)
-	service.Mux.Handle("POST", "/jwt/signin", ctrl.MuxHandler("signin", h, unmarshalSigninJWTPayload))
-	service.LogInfo("mount", "ctrl", "JWT", "action", "Signin", "route", "POST /jwt/signin")
+	service.Mux.Handle("POST", "/signin", ctrl.MuxHandler("signin", h, unmarshalSigninJWTPayload))
+	service.LogInfo("mount", "ctrl", "JWT", "action", "Signin", "route", "POST /signin")
 }
 
 // handleJWTOrigin applies the CORS response headers corresponding to the origin.

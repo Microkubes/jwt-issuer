@@ -28,7 +28,7 @@ definitions:
       detail: Value of ID must be an integer
       id: 3F1FKVRR
       meta:
-        timestamp: 1.458609066e+09
+        timestamp: 1458609066
       status: "400"
     properties:
       code:
@@ -49,7 +49,7 @@ definitions:
         description: a meta object containing non-standard meta-information about
           the error.
         example:
-          timestamp: 1.458609066e+09
+          timestamp: 1458609066
         type: object
       status:
         description: the HTTP status code applicable to this problem, expressed as
@@ -64,7 +64,7 @@ info:
   title: JWT Sign in
   version: "1.0"
 paths:
-  /jwt/signin:
+  /signin:
     post:
       description: Signs in the user and generates JWT token
       operationId: jwt#signin

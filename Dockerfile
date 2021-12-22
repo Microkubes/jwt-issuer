@@ -1,5 +1,5 @@
 ### Multi-stage build
-FROM golang:1.13.5-alpine3.10 as build
+FROM golang:1.17.3-alpine3.15 as build
 
 RUN apk --no-cache add git curl openssh
 
@@ -10,7 +10,7 @@ RUN cd /go/src/github.com/Microkubes/jwt-issuer && \
 
 
 ### Main
-FROM alpine:3.10
+FROM alpine:3.15
 
 COPY --from=build /go/src/github.com/Microkubes/jwt-issuer/config.json /config.json
 COPY --from=build /go/bin/jwt-issuer /jwt-issuer

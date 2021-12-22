@@ -17,7 +17,7 @@ var _ = API("jwt-signin", func() {
 })
 
 var _ = Resource("jwt", func() {
-	BasePath("/jwt")
+	BasePath("/")
 	Description("Sign in")
 
 	Origin("*", func() {

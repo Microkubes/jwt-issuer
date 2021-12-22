@@ -21,7 +21,7 @@ import (
 // SigninJWTPath computes a request path to the signin action of jwt.
 func SigninJWTPath() string {
 
-	return fmt.Sprintf("/jwt/signin")
+	return fmt.Sprintf("/signin")
 }
 
 // Signs in the user and generates JWT token
