@@ -26,13 +26,15 @@ type FileKeyStore struct {
 	KeysMap map[string]interface{}
 }
 
+var fks KeyStore
+
 // GetPrivateKey returns the default private key. This key is also available
 // under the name "default".
 func (fks *FileKeyStore) GetPrivateKey() (interface{}, error) {
 	if fks.PrivateKey != nil {
 		return fks.PrivateKey, nil
 	}
-	return nil, fmt.Errorf("No default key loaded")
+	return nil, fmt.Errorf("no default key loaded")
 }
 
 // GetPrivateKeyByName returns a private by by name. The key is looked up in the
@@ -54,6 +56,7 @@ func NewFileKeyStore(keyFiles map[string]string) (KeyStore, error) {
 		KeysMap: make(map[string]interface{}),
 	}
 	for keyName, keyFile := range keyFiles {
+		fmt.Println("iterating for keyname ", keyName, " and keyFile ", keyFile)
 		keyBytes, err := ioutil.ReadFile(keyFile)
 		if err != nil {
 			return nil, err
@@ -69,5 +72,17 @@ func NewFileKeyStore(keyFiles map[string]string) (KeyStore, error) {
 		return nil, fmt.Errorf("no default key for signing client JWT tokens defined")
 	}
 	keyStore.PrivateKey = defaultKey
+	fks = &keyStore
 	return &keyStore, nil
+}
+
+// GetFileKeyStore returns a FileKeyStore if one is present, otherwise it
+// returns nil
+func GetFileKeyStore() KeyStore {
+	return fks
+}
+
+// SetKeyStore sets a KeyStore
+func SetKeyStore(ks KeyStore) {
+	fks = ks
 }

@@ -1,7 +1,7 @@
 {
   "jwt":{
     "issuer": "Jormungandr JWT Authority",
-    "signingMethod": "RS512",
+    "signingMethod": "RS256",
     "expiryTime": 86400000
   },
   "keys": {

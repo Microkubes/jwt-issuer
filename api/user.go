@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Microkubes/jwt-issuer/config"
-	"github.com/Microkubes/jwt-issuer/store"
+	"github.com/Microkubes/jwt-issuer/pkg/config"
+	"github.com/Microkubes/jwt-issuer/pkg/store"
 	"github.com/Microkubes/microservice-security/jwt"
 	"github.com/afex/hystrix-go/hystrix"
 	uuid "github.com/satori/go.uuid"
@@ -20,6 +20,8 @@ type UserAPI interface {
 	FindUser(email, password string) (*User, error)
 }
 
+var userApi UserAPI
+
 // NewUserAPI creates a UserAPI with a given configuration and a store.KeyStore.
 func NewUserAPI(config *config.Config, keyStore store.KeyStore) (UserAPI, error) {
 	serviceURL, ok := config.Services["user-microservice"]
@@ -27,12 +29,14 @@ func NewUserAPI(config *config.Config, keyStore store.KeyStore) (UserAPI, error)
 		return nil, fmt.Errorf("no URL for the User Microservice")
 	}
 	client := &http.Client{}
-	return &UserAPIClient{
+
+	userApi = &UserAPIClient{
 		UserServiceURL: serviceURL,
 		KeyStore:       keyStore,
 		Config:         config,
 		Client:         client,
-	}, nil
+	}
+	return userApi, nil
 }
 
 // UserAPIClient holds the data for the user microservice client
@@ -170,4 +174,13 @@ func (userAPI *UserAPIClient) selfSignJWT() (string, error) {
 	sysToken, err := jwt.SignToken(claims, signingMethod, sysKey)
 
 	return sysToken, err
+}
+
+// GetUserApi returns an instance of the UserAPI
+func GetUserApi() UserAPI {
+	return userApi
+}
+
+func SetUserApi(api interface{}) {
+	userApi = api.(UserAPI)
 }
