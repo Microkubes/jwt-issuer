@@ -56,7 +56,6 @@ func NewFileKeyStore(keyFiles map[string]string) (KeyStore, error) {
 		KeysMap: make(map[string]interface{}),
 	}
 	for keyName, keyFile := range keyFiles {
-		fmt.Println("iterating for keyname ", keyName, " and keyFile ", keyFile)
 		keyBytes, err := ioutil.ReadFile(keyFile)
 		if err != nil {
 			return nil, err
@@ -76,7 +75,7 @@ func NewFileKeyStore(keyFiles map[string]string) (KeyStore, error) {
 	return &keyStore, nil
 }
 
-// GetFileKeyStore returns a FileKeyStore if one is present, otherwise it
+// GetFileKeyStore returns a KeyStore if one is present, otherwise it
 // returns nil
 func GetFileKeyStore() KeyStore {
 	return fks

@@ -104,75 +104,104 @@ func TestSigninJWTCreated(t *testing.T) {
 	}
 }
 
-// func TestSigninJWTBadRequest(t *testing.T) {
-// 	config := &config.Config{
-// 		Jwt: config.JWTConfig{
-// 			ExpiryTime:    10000, // 10 seconds
-// 			Issuer:        "Mock Issuer",
-// 			SigningMethod: "RS512",
-// 		},
-// 		Microservice: gateway.MicroserviceConfig{
-// 			Hosts:            []string{"localhost", "jwt.auth.jormungandr.org"},
-// 			MicroserviceName: "jwt-issuer",
-// 			MicroservicePort: 8080,
-// 			ServicesMaxSlots: 10,
-// 			VirtualHost:      "jwt.auth.jormungandr.org",
-// 			Weight:           10,
-// 		},
-// 		Services: map[string]string{
-// 			"user-microservice": "http://user.services.jormungandr.org:8001/user",
-// 		},
-// 	}
-// 	service := goa.New("signin")
+func TestSigninJWTBadRequest(t *testing.T) {
+	conf := &config.Config{
+		Jwt: config.JWTConfig{
+			ExpiryTime:    10000, // 10 seconds
+			Issuer:        "Mock Issuer",
+			SigningMethod: "RS256",
+		},
+		Microservice: gateway.MicroserviceConfig{
+			Hosts:            []string{"localhost", "jwt.auth.jormungandr.org"},
+			MicroserviceName: "jwt-issuer",
+			MicroservicePort: 8080,
+			ServicesMaxSlots: 10,
+			VirtualHost:      "jwt.auth.jormungandr.org",
+			Weight:           10,
+		},
+		Services: map[string]string{
+			"user-microservice": "http://user.services.jormungandr.org:8001/user",
+		},
+	}
+	store.SetKeyStore(NewMockKeyStore())
+	file, err := json.Marshal(conf)
+	assert.NoError(t, err, "error marshaling conf data")
+	err = ioutil.WriteFile("test.json", file, 0644)
+	assert.NoError(t, err, "error writing test config data to file")
+	defer os.RemoveAll("test.json")
+	config.LoadConfig("test.json")
+	api.SetUserApi(&MockUserAPI{
+		Handler: func(user, pass string) (*api.User, error) {
+			return nil, nil
+		}},
+	)
+	test := echo.New()
+	test.POST("/signin", Signin)
+	form := url.Values{
+		"email":    {"someuser@test.com"},
+		"password": {"password"},
+		"scope":    {"api:read"},
+	}
+	req, err := http.NewRequest("POST", "/signin", strings.NewReader(form.Encode()))
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	assert.NoError(t, err, "error creating request")
+	rec := httptest.NewRecorder()
+	c := test.NewContext(req, rec)
+	if assert.NoError(t, Signin(c), "error in Signin handler") {
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+	}
+}
 
-// 	controller := NewSigninController(service, &MockUserAPI{
-// 		Handler: func(email, pass string) (*api.User, error) {
-// 			return nil, nil // User not found
-// 		},
-// 	}, NewMockKeyStore(), config)
-// 	email := "someuser@test.com"
-// 	pass := "pass"
-// 	scope := "api:read"
-// 	test.SigninJWTBadRequest(t, context.Background(), service, controller, &app.Credentials{
-// 		Email:    &email,
-// 		Password: &pass,
-// 		Scope:    &scope,
-// 	})
-// }
-
-// func TestSigninJWTInternalServerError(t *testing.T) {
-// 	config := &config.Config{
-// 		Jwt: config.JWTConfig{
-// 			ExpiryTime:    10000, // 10 seconds
-// 			Issuer:        "Mock Issuer",
-// 			SigningMethod: "RS512",
-// 		},
-// 		Microservice: gateway.MicroserviceConfig{
-// 			Hosts:            []string{"localhost", "jwt.auth.jormungandr.org"},
-// 			MicroserviceName: "jwt-issuer",
-// 			MicroservicePort: 8080,
-// 			ServicesMaxSlots: 10,
-// 			VirtualHost:      "jwt.auth.jormungandr.org",
-// 			Weight:           10,
-// 		},
-// 		Services: map[string]string{
-// 			"user-microservice": "http://user.services.jormungandr.org:8001/user",
-// 		},
-// 	}
-// 	service := goa.New("signin")
-
-// 	controller := NewSigninController(service, &MockUserAPI{
-// 		Handler: func(user, pass string) (*api.User, error) {
-// 			return nil, fmt.Errorf("test Error :)") // Return an error to cause internal server error
-// 		},
-// 	}, NewMockKeyStore(), config)
-// 	email := "someuser@test.com"
-// 	pass := "pass"
-// 	scope := "api:read"
-
-// 	test.SigninJWTInternalServerError(t, context.Background(), service, controller, &app.Credentials{
-// 		Email:    &email,
-// 		Password: &pass,
-// 		Scope:    &scope,
-// 	})
-// }
+func TestSigninJWTUserNotActive(t *testing.T) {
+	conf := &config.Config{
+		Jwt: config.JWTConfig{
+			ExpiryTime:    10000, // 10 seconds
+			Issuer:        "Mock Issuer",
+			SigningMethod: "RS256",
+		},
+		Microservice: gateway.MicroserviceConfig{
+			Hosts:            []string{"localhost", "jwt.auth.jormungandr.org"},
+			MicroserviceName: "jwt-issuer",
+			MicroservicePort: 8080,
+			ServicesMaxSlots: 10,
+			VirtualHost:      "jwt.auth.jormungandr.org",
+			Weight:           10,
+		},
+		Services: map[string]string{
+			"user-microservice": "http://user.services.jormungandr.org:8001/user",
+		},
+	}
+	store.SetKeyStore(NewMockKeyStore())
+	file, err := json.Marshal(conf)
+	assert.NoError(t, err, "error marshaling conf data")
+	err = ioutil.WriteFile("test.json", file, 0644)
+	assert.NoError(t, err, "error writing test config data to file")
+	defer os.RemoveAll("test.json")
+	config.LoadConfig("test.json")
+	api.SetUserApi(&MockUserAPI{
+		Handler: func(user, pass string) (*api.User, error) {
+			return &api.User{
+				Email:         "email@example.com",
+				ID:            "000000000001",
+				Organizations: []string{"org1", "org2"},
+				Roles:         []string{"user"},
+				Active:        false,
+			}, nil
+		}},
+	)
+	test := echo.New()
+	test.POST("/signin", Signin)
+	form := url.Values{
+		"email":    {"someuser@test.com"},
+		"password": {"password"},
+		"scope":    {"api:read"},
+	}
+	req, err := http.NewRequest("POST", "/signin", strings.NewReader(form.Encode()))
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	assert.NoError(t, err, "error creating request")
+	rec := httptest.NewRecorder()
+	c := test.NewContext(req, rec)
+	if assert.NoError(t, Signin(c), "error in Signin handler") {
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+	}
+}
