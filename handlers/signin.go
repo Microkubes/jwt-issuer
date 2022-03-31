@@ -21,6 +21,7 @@ func Signin(c echo.Context) error {
 		return c.JSON(500, err)
 	}
 	user, err := api.GetUserApi().FindUser(u.Email, u.Password)
+	fmt.Println("the found user ", user)
 	if err != nil {
 		log.Fatalf("error making a request to user api %+v\n", err)
 		return c.JSON(500, err)
@@ -42,9 +43,8 @@ func Signin(c echo.Context) error {
 	}
 	bt := fmt.Sprintf("Bearer %s", st)
 	c.Response().Header().Set("Authorization", bt)
-	return c.JSON(201, echo.Map{
-		"token": bt,
-	})
+	// NOTE: redirect to home page
+	return c.JSON(201, bt)
 }
 
 func signToken(user api.User, scope string, key interface{}) (string, error) {
