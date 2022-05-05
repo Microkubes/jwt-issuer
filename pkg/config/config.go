@@ -38,6 +38,8 @@ type Config struct {
 	Version string `json:"version"`
 }
 
+var conf Config
+
 // LoadConfig loads a Config from a configuration JSON file.
 func LoadConfig(confFile string) (*Config, error) {
 	confBytes, err := ioutil.ReadFile(confFile)
@@ -49,5 +51,10 @@ func LoadConfig(confFile string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	conf = *config
 	return config, nil
+}
+
+func GetConfig() Config {
+	return conf
 }

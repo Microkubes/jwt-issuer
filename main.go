@@ -3,21 +3,21 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/Microkubes/jwt-issuer/api"
-	"github.com/Microkubes/jwt-issuer/app"
-	"github.com/Microkubes/jwt-issuer/config"
-	"github.com/Microkubes/jwt-issuer/store"
-	"github.com/Microkubes/microservice-tools/utils/healthcheck"
-	"github.com/Microkubes/microservice-tools/utils/version"
-	"github.com/keitaroinc/goa"
-	"github.com/keitaroinc/goa/middleware"
+	"github.com/Microkubes/jwt-issuer/handlers"
+	"github.com/Microkubes/jwt-issuer/pkg/config"
+	"github.com/Microkubes/jwt-issuer/pkg/store"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	// Create service
-	service := goa.New("jwt-signin")
+
+	e := echo.New()
+
+	e.POST("/signin", handlers.Signin)
 
 	cf := os.Getenv("SERVICE_CONFIG_FILE")
 	if cf == "" {
@@ -25,7 +25,7 @@ func main() {
 	}
 	config, err := config.LoadConfig(cf)
 	if err != nil {
-		service.LogError("config", "err", err)
+		log.Printf("error loading config %+v", err)
 		return
 	}
 
@@ -34,28 +34,12 @@ func main() {
 		panic(err)
 	}
 
-	userAPI, err := api.NewUserAPI(config, keyStore)
+	_, err = api.NewUserAPI(config, keyStore)
 	if err != nil {
 		panic(err)
 	}
 
-	// Mount middleware
-	service.Use(middleware.RequestID())
-	service.Use(middleware.LogRequest(true))
-	service.Use(middleware.ErrorHandler(service, true))
-	service.Use(middleware.Recover())
-
-	service.Use(healthcheck.NewCheckMiddleware("/healthcheck"))
-
-	service.Use(version.NewVersionMiddleware(config.Version, "/version"))
-
-	// Mount "signin" controller
-	c := NewSigninController(service, userAPI, keyStore, config)
-	app.MountJWTController(service, c)
-
-	// Start service
-	if err := service.ListenAndServe(":8080"); err != nil {
-		service.LogError("startup", "err", err)
-	}
-
+	e.Logger.Fatal(
+		e.Start(":8080"),
+	)
 }
